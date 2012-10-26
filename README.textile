@@ -35,11 +35,6 @@ SVStatusHUD is created as a singleton (i.e. it doesn't need to be explicitly all
 
 *Important*: for crispier rendering, provided image should precisely be 86x86 pixels (retina: 172x172).
 
-
-h2. Automatic Reference Counting (ARC) support
-
-Maintaining an official ARC branch has proven to be too much work, often leading to confusion since the ARC branch is always a few commits behind. If you'd like to use SVStatusHUD in your ARC-enabled project, you'll have to "add the @-fno-objc-arc@ compiler flag":http://stackoverflow.com/questions/6646052/how-can-i-disable-arc-for-a-single-file-in-a-project to all of SVStatusHUD's files.
-
 h2. Credits
 
 SVStatusHUD is brought to you by "Sam Vermette":http://samvermette.com and "contributors to the project":https://github.com/samvermette/SVStatusHUD/contributors. If you have feature suggestions or bug reports, feel free to help out by sending pull requests or by "creating new issues":https://github.com/samvermette/SVStatusHUD/issues/new. If you're using SVStatusHUD in your project, attribution would be nice.

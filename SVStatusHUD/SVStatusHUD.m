@@ -15,18 +15,18 @@
 
 @interface SVStatusImage : UIView
 
-@property (nonatomic, retain) UIImage *image;
+@property (nonatomic, strong) UIImage *image;
 
 @end
 
 
 @interface SVStatusHUD ()
 
-@property (nonatomic, retain) NSTimer *fadeOutTimer;
-@property (nonatomic, readonly) UIWindow *overlayWindow;
-@property (nonatomic, readonly) UIView *hudView;
-@property (nonatomic, readonly) UILabel *stringLabel;
-@property (nonatomic, readonly) SVStatusImage *imageView;
+@property (nonatomic, strong) NSTimer *fadeOutTimer;
+@property (nonatomic, strong, readonly) UIWindow *overlayWindow;
+@property (nonatomic, strong, readonly) UIView *hudView;
+@property (nonatomic, strong, readonly) UILabel *stringLabel;
+@property (nonatomic, strong, readonly) SVStatusImage *imageView;
 
 - (void)showWithImage:(UIImage*)image status:(NSString*)string duration:(NSTimeInterval)duration;
 - (void)setStatus:(NSString*)string;
@@ -46,16 +46,9 @@ static SVStatusHUD *sharedView = nil;
 
 - (void)dealloc {
 	
-	if(fadeOutTimer != nil)
-		[fadeOutTimer invalidate], [fadeOutTimer release], fadeOutTimer = nil;
+    [fadeOutTimer invalidate];
 	
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    [hudView release];
-    [stringLabel release];
-    [imageView release];
-    
-    [super dealloc];
 }
 
 + (SVStatusHUD*)sharedView {
@@ -132,10 +125,10 @@ static SVStatusHUD *sharedView = nil;
 		self.alpha = 1;
 	}
     
-    if(fadeOutTimer != nil)
-		[fadeOutTimer invalidate], [fadeOutTimer release], fadeOutTimer = nil;
+    [fadeOutTimer invalidate];
+	fadeOutTimer = nil;
 	
-	fadeOutTimer = [[NSTimer scheduledTimerWithTimeInterval:duration target:self selector:@selector(dismiss) userInfo:nil repeats:NO] retain];
+	fadeOutTimer = [NSTimer scheduledTimerWithTimeInterval:duration target:self selector:@selector(dismiss) userInfo:nil repeats:NO];
     
     [self setNeedsDisplay];
 }
@@ -202,10 +195,8 @@ static SVStatusHUD *sharedView = nil;
 					 completion:^(BOOL finished){ 
                          if(sharedView.alpha == 0) {
                              [[NSNotificationCenter defaultCenter] removeObserver:sharedView];
-                             [overlayWindow release], overlayWindow = nil;
-                             [sharedView release], sharedView = nil;
-                             
-                             [[UIApplication sharedApplication].windows.lastObject makeKeyAndVisible];
+                             overlayWindow = nil;
+                             sharedView = nil;
                              
                              // uncomment to make sure UIWindow is gone from app.windows
                              //NSLog(@"%@", [UIApplication sharedApplication].windows);
@@ -286,12 +277,8 @@ static SVStatusHUD *sharedView = nil;
 }
 
 - (void)setImage:(UIImage *)newImage {
-    
-    if(image)
-        [image release], image = nil;
-    
     if(newImage) {
-        image = [newImage retain];
+        image = newImage;
         [self setNeedsDisplay];
     }
 }
